@@ -15,3 +15,12 @@ Edit `inventory/hosts.ini` with the IPs or hostnames of your target machines.
 
 ```bash
 ansible-playbook -i inventory/hosts.ini playbooks/data-science.yml -u <username> --ask-become-pass
+```
+```bash
+ansible-playbook -i inventory/hosts.ini playbooks/llm-dev.yml -u <username> --ask-become-pass
+```
+### 3. Requirements
+
+```bash
+pip install ansible
+```
