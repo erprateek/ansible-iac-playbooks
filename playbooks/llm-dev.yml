@@ -1,0 +1,14 @@
+---
+- name: Setup Ubuntu system for LLM Application Development
+  hosts: all
+  become: yes
+
+  tasks:
+
+    - name: Include common setup
+      import_role:
+        name: common
+
+    - name: Include LLM dev tools
+      import_role:
+        name: llm
