@@ -1,0 +1,93 @@
+---
+- name: Setup Ubuntu system for Data Science
+  hosts: all
+  become: yes
+
+  vars:
+    python_version: "3.10"
+
+  tasks:
+
+    - name: Update APT package cache
+      apt:
+        update_cache: yes
+
+    - name: Upgrade all packages
+      apt:
+        upgrade: dist
+
+    - name: Install system dependencies
+      apt:
+        name:
+          - build-essential
+          - curl
+          - git
+          - wget
+          - unzip
+          - htop
+          - zsh
+          - libssl-dev
+          - libffi-dev
+          - python3-pip
+          - python3-venv
+          - python3-dev
+        state: present
+
+    - name: Upgrade pip
+      pip:
+        name: pip
+        executable: pip3
+        state: latest
+
+    - name: Install common Python data science libraries
+      pip:
+        name:
+          - numpy
+          - pandas
+          - matplotlib
+          - seaborn
+          - scikit-learn
+          - scipy
+          - jupyter
+          - notebook
+          - jupyterlab
+          - ipywidgets
+          - statsmodels
+          - plotly
+          - xgboost
+          - lightgbm
+          - tqdm
+        executable: pip3
+
+    - name: Create a Jupyter Notebook config directory
+      file:
+        path: "/home/{{ ansible_user }}/.jupyter"
+        state: directory
+        owner: "{{ ansible_user }}"
+        mode: 0755
+
+    - name: Generate a default Jupyter Notebook config (first run)
+      command: jupyter notebook --generate-config
+      args:
+        creates: "/home/{{ ansible_user }}/.jupyter/jupyter_notebook_config.py"
+      become: false
+      environment:
+        HOME: "/home/{{ ansible_user }}"
+
+    - name: Install Jupyter Notebook extensions
+      pip:
+        name: jupyter_contrib_nbextensions
+        executable: pip3
+
+    - name: Enable common Jupyter Notebook extensions
+      command: jupyter contrib nbextension install --user
+      become: false
+      environment:
+        HOME: "/home/{{ ansible_user }}"
+
+    - name: Set ownership for .jupyter directory
+      file:
+        path: "/home/{{ ansible_user }}/.jupyter"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        recurse: yes
