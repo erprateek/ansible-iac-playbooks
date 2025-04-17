@@ -1,0 +1,25 @@
+---
+- name: Update and upgrade system
+  apt:
+    update_cache: yes
+    upgrade: dist
+
+- name: Install common packages
+  apt:
+    name:
+      - build-essential
+      - curl
+      - git
+      - wget
+      - unzip
+      - zsh
+      - python3-pip
+      - python3-venv
+      - python3-dev
+    state: present
+
+- name: Upgrade pip
+  pip:
+    name: pip
+    executable: pip3
+    state: latest
