@@ -1,0 +1,23 @@
+- name: Install Python libraries for LLM development
+  pip:
+    name:
+      - transformers
+      - accelerate
+      - sentence-transformers
+      - langchain
+      - llama-index
+      - openai
+      - chromadb
+      - faiss-cpu
+      - torch
+      - fastapi
+      - uvicorn
+      - jupyterlab
+    executable: pip3
+
+- name: Create project directory
+  file:
+    path: /home/{{ ansible_user }}/llm-projects
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: '0755'
